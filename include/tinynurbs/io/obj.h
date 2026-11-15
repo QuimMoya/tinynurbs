@@ -73,7 +73,7 @@ void curveReadOBJ(std::istream &is, unsigned int &deg, std::vector<T> &knots,
                 ssline >> four_coords[index++];
             }
             ctrl_pts_buf.emplace_back(four_coords[0], four_coords[1], four_coords[2]);
-            weights_buf.push_back(four_coords[3]);
+            weights_buf.push_back(static_cast<T>(four_coords[3]));
         }
         else if (start == "cstype")
         {
@@ -113,7 +113,7 @@ void curveReadOBJ(std::istream &is, unsigned int &deg, std::vector<T> &knots,
                 }
                 else
                 {
-                    indices.push_back(std::stof(token));
+                    indices.push_back(static_cast<int>(std::stof(token)));
                 }
             }
             parsed.curv = true;
@@ -164,13 +164,13 @@ void curveReadOBJ(std::istream &is, unsigned int &deg, std::vector<T> &knots,
         throw std::runtime_error("'parm' line missing/incomplete in file");
     }
 
-    int num_knots = temp_knots.size();
-    int num_cp = num_knots - deg - 1;
+    size_t num_knots = temp_knots.size();
+    size_t num_cp = num_knots - deg - 1;
 
     ctrlPts.resize(num_cp);
     weights.resize(num_cp);
     size_t num = 0;
-    for (int i = 0; i < num_cp; ++i)
+    for (size_t i = 0; i < num_cp; ++i)
     {
         assert(i < ctrlPts.size());
         ctrlPts[i] = ctrl_pts_buf[indices[num] - 1];
@@ -235,7 +235,7 @@ void surfaceReadOBJ(std::istream &is, unsigned int &deg_u, unsigned int &deg_v,
                 ssline >> four_coords[index++];
             }
             ctrl_pts_buf.emplace_back(four_coords[0], four_coords[1], four_coords[2]);
-            weights_buf.push_back(four_coords[3]);
+            weights_buf.push_back(static_cast<T>(four_coords[3]));
         }
         else if (start == "cstype")
         {
@@ -275,7 +275,7 @@ void surfaceReadOBJ(std::istream &is, unsigned int &deg_u, unsigned int &deg_v,
                 }
                 else
                 {
-                    indices.push_back(std::stof(token));
+                    indices.push_back(static_cast<int>(std::stof(token)));
                 }
             }
             parsed.surf = true;
@@ -342,17 +342,17 @@ void surfaceReadOBJ(std::istream &is, unsigned int &deg_u, unsigned int &deg_v,
         throw std::runtime_error("'parm' line missing/incomplete in file");
     }
 
-    int num_knots_u = temp_uknots.size();
-    int num_knots_v = temp_vknots.size();
-    int num_cp_u = num_knots_u - deg_u - 1;
-    int num_cp_v = num_knots_v - deg_v - 1;
+    size_t num_knots_u = temp_uknots.size();
+    size_t num_knots_v = temp_vknots.size();
+    size_t num_cp_u = num_knots_u - deg_u - 1;
+    size_t num_cp_v = num_knots_v - deg_v - 1;
 
     ctrlPts.resize(num_cp_u, num_cp_v);
     weights.resize(num_cp_u, num_cp_v);
     size_t num = 0;
-    for (int j = 0; j < num_cp_v; ++j)
+    for (size_t j = 0; j < num_cp_v; ++j)
     {
-        for (int i = 0; i < num_cp_u; ++i)
+        for (size_t i = 0; i < num_cp_u; ++i)
         {
             assert(i < ctrlPts.rows() && j < ctrlPts.cols());
             ctrlPts(i, j) = ctrl_pts_buf[indices[num] - 1];
@@ -381,14 +381,14 @@ void curveSaveOBJ(std::ostream &os, unsigned int degree, const std::vector<T> &k
 {
     using std::endl;
 
-    for (int i = 0; i < ctrlPts.size(); ++i)
+    for (size_t i = 0; i < ctrlPts.size(); ++i)
     {
         os << "v " << ctrlPts[i].x << " " << ctrlPts[i].y << " " << ctrlPts[i].z << " "
              << weights[i] << endl;
     }
 
-    int n_knots = knots.size();
-    int n_cp = ctrlPts.size();
+    size_t n_knots = knots.size();
+    size_t n_cp = ctrlPts.size();
 
     if (!rational)
     {
@@ -400,7 +400,7 @@ void curveSaveOBJ(std::ostream &os, unsigned int degree, const std::vector<T> &k
     }
     os << "deg " << degree << endl << "curv ";
     os << knots[degree] << " " << knots[n_knots - degree - 1];
-    for (int i = 0; i < n_cp; ++i)
+    for (size_t i = 0; i < n_cp; ++i)
     {
         os << " " << i + 1;
     }
@@ -436,20 +436,20 @@ void surfaceSaveOBJ(std::ostream &os, unsigned int deg_u, unsigned int deg_v,
         return;
     }
 
-    for (int j = 0; j < ctrlPts.cols(); j++)
+    for (size_t j = 0; j < ctrlPts.cols(); ++j)
     {
-        for (int i = 0; i < ctrlPts.rows(); i++)
+        for (size_t i = 0; i < ctrlPts.rows(); ++i)
         {
             os << "v " << ctrlPts(i, j).x << " " << ctrlPts(i, j).y << " " << ctrlPts(i, j).z
                  << " " << weights(i, j) << endl;
         }
     }
 
-    int nknots_u = knots_u.size();
-    int nknots_v = knots_v.size();
+    size_t nknots_u = knots_u.size();
+    size_t nknots_v = knots_v.size();
 
-    int nCpU = ctrlPts.rows();
-    int nCpV = ctrlPts.cols();
+    size_t nCpU = ctrlPts.rows();
+    size_t nCpV = ctrlPts.cols();
 
     if (!rational)
     {
@@ -462,7 +462,7 @@ void surfaceSaveOBJ(std::ostream &os, unsigned int deg_u, unsigned int deg_v,
     os << "deg " << deg_u << " " << deg_v << endl << "surf ";
     os << knots_u[deg_u] << " " << knots_u[nknots_u - deg_u - 1] << " " << knots_v[deg_v] << " "
          << knots_v[nknots_v - deg_v - 1];
-    for (int i = 0; i < nCpU * nCpV; i++)
+    for (size_t i = 0; i < nCpU * nCpV; ++i)
     {
         os << " " << i + 1;
     }

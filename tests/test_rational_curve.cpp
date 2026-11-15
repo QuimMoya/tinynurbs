@@ -108,12 +108,12 @@ TEST_CASE("curveSplit (rational)", "[curve, rational, modify]")
     REQUIRE(left.degree == crv.degree);
     REQUIRE(right.degree == crv.degree);
 
-    for (int i = 0; i < left.degree + 1; ++i) {
-        int d = left.knots.size() - (left.degree + 1);
-        REQUIRE(left.knots[d+i] == Approx(u));
+    for (unsigned int i = 0; i < left.degree + 1; ++i) {
+        size_t d = left.knots.size() - (left.degree + 1);
+        REQUIRE(left.knots[d + i] == Approx(u));
     }
 
-    for (int i = 0; i < right.degree + 1; ++i) {
+    for (unsigned int i = 0; i < right.degree + 1; ++i) {
         REQUIRE(right.knots[i] == Approx(u));
     }
 
@@ -131,17 +131,17 @@ TEST_CASE("curveReadOBJ and curveSaveOBJ (rational)", "[curve, rational, obj]")
     auto read_crv = tinynurbs::curveReadOBJ<float>("curve.obj");
     REQUIRE(crv.degree == read_crv.degree);
     REQUIRE(crv.knots.size() == read_crv.knots.size());
-    for (int i = 0; i < crv.knots.size(); ++i) {
+    for (size_t i = 0; i < crv.knots.size(); ++i) {
         REQUIRE(crv.knots[i] == Approx(read_crv.knots[i]));
     }
     REQUIRE(crv.control_points.size() == read_crv.control_points.size());
-    for (int i = 0; i < crv.control_points.size(); ++i) {
+    for (size_t i = 0; i < crv.control_points.size(); ++i) {
         REQUIRE(crv.control_points[i].x == Approx(read_crv.control_points[i].x));
         REQUIRE(crv.control_points[i].y == Approx(read_crv.control_points[i].y));
         REQUIRE(crv.control_points[i].z == Approx(read_crv.control_points[i].z));
     }
     REQUIRE(crv.weights.size() == read_crv.weights.size());
-    for (int i = 0; i < crv.weights.size(); ++i) {
+    for (size_t i = 0; i < crv.weights.size(); ++i) {
         REQUIRE(crv.weights[i] == Approx(read_crv.weights[i]));
     }
 }

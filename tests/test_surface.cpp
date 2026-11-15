@@ -147,12 +147,12 @@ TEST_CASE("surfaceSplitU (non-rational)", "[surface, non-rational, modify]")
     REQUIRE(left.degree_v == srf.degree_v);
     REQUIRE(right.degree_v == srf.degree_v);
 
-    for (int i = 0; i < left.degree_u + 1; ++i) {
-        int d = left.knots_u.size() - (left.degree_u + 1);
+    for (unsigned int i = 0; i < left.degree_u + 1; ++i) {
+        size_t d = left.knots_u.size() - (left.degree_u + 1);
         REQUIRE(left.knots_u[d+i] == Approx(u));
     }
 
-    for (int i = 0; i < right.degree_u + 1; ++i) {
+    for (unsigned int i = 0; i < right.degree_u + 1; ++i) {
         REQUIRE(right.knots_u[i] == Approx(u));
     }
 
@@ -184,12 +184,12 @@ TEST_CASE("surfaceSplitV (non-rational)", "[surface, non-rational, modify]")
     REQUIRE(left.degree_v == srf.degree_v);
     REQUIRE(right.degree_v == srf.degree_v);
 
-    for (int i = 0; i < left.degree_v + 1; ++i) {
-        int d = left.knots_v.size() - (left.degree_v + 1);
+    for (unsigned int i = 0; i < left.degree_v + 1; ++i) {
+        size_t d = left.knots_v.size() - (left.degree_v + 1);
         REQUIRE(left.knots_v[d+i] == Approx(v));
     }
 
-    for (int i = 0; i < right.degree_v + 1; ++i) {
+    for (unsigned int i = 0; i < right.degree_v + 1; ++i) {
         REQUIRE(right.knots_v[i] == Approx(v));
     }
 
@@ -213,17 +213,17 @@ TEST_CASE("surfaceReadOBJ and surfaceSaveOBJ (non-rational)", "[surface, non-rat
     REQUIRE(srf.degree_u == read_srf.degree_u);
     REQUIRE(srf.degree_v == read_srf.degree_v);
     REQUIRE(srf.knots_u.size() == read_srf.knots_u.size());
-    for (int i = 0; i < srf.knots_u.size(); ++i) {
+    for (size_t i = 0; i < srf.knots_u.size(); ++i) {
         REQUIRE(srf.knots_u[i] == Approx(read_srf.knots_u[i]));
     }
     REQUIRE(srf.knots_v.size() == read_srf.knots_v.size());
-    for (int i = 0; i < srf.knots_v.size(); ++i) {
+    for (size_t i = 0; i < srf.knots_v.size(); ++i) {
         REQUIRE(srf.knots_v[i] == Approx(read_srf.knots_v[i]));
     }
     REQUIRE(srf.control_points.rows() == read_srf.control_points.rows());
     REQUIRE(srf.control_points.cols() == read_srf.control_points.cols());
-    for (int i = 0; i < srf.control_points.rows(); ++i) {
-        for (int j = 0; j < srf.control_points.cols(); ++j) {
+    for (size_t i = 0; i < srf.control_points.rows(); ++i) {
+        for (size_t j = 0; j < srf.control_points.cols(); ++j) {
             REQUIRE(srf.control_points(i, j).x == Approx(read_srf.control_points(i, j).x));
             REQUIRE(srf.control_points(i, j).y == Approx(read_srf.control_points(i, j).y));
             REQUIRE(srf.control_points(i, j).z == Approx(read_srf.control_points(i, j).z));

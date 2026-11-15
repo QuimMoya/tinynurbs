@@ -434,9 +434,9 @@ array2<glm::vec<3, T>> surfaceDerivatives(const RationalSurface<T> &srf, int num
 
     array2<tvecnp1> homo_cp;
     homo_cp.resize(srf.control_points.rows(), srf.control_points.cols());
-    for (int i = 0; i < srf.control_points.rows(); ++i)
+    for (size_t i = 0; i < srf.control_points.rows(); ++i)
     {
-        for (int j = 0; j < srf.control_points.cols(); ++j)
+        for (size_t j = 0; j < srf.control_points.cols(); ++j)
         {
             homo_cp(i, j) =
                 util::cartesianToHomogenous(srf.control_points(i, j), srf.weights(i, j));
@@ -448,9 +448,9 @@ array2<glm::vec<3, T>> surfaceDerivatives(const RationalSurface<T> &srf, int num
 
     array2<tvecn> Aders;
     Aders.resize(num_ders + 1, num_ders + 1);
-    for (int i = 0; i < homo_ders.rows(); ++i)
+    for (size_t i = 0; i < homo_ders.rows(); ++i)
     {
-        for (int j = 0; j < homo_ders.cols(); ++j)
+        for (size_t j = 0; j < homo_ders.cols(); ++j)
         {
             Aders(i, j) = util::truncateHomogenous(homo_ders(i, j));
         }

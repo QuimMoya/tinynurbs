@@ -131,11 +131,11 @@ TEST_CASE("curveReadOBJ and curveSaveOBJ (non-rational)", "[curve, non-rational,
     auto read_crv = tinynurbs::Curve3f(tinynurbs::curveReadOBJ<float>("curve.obj"));
     REQUIRE(crv.degree == read_crv.degree);
     REQUIRE(crv.knots.size() == read_crv.knots.size());
-    for (int i = 0; i < crv.knots.size(); ++i) {
+    for (size_t i = 0; i < crv.knots.size(); ++i) {
         REQUIRE(crv.knots[i] == Approx(read_crv.knots[i]));
     }
     REQUIRE(crv.control_points.size() == read_crv.control_points.size());
-    for (int i = 0; i < crv.control_points.size(); ++i) {
+    for (size_t i = 0; i < crv.control_points.size(); ++i) {
         REQUIRE(crv.control_points[i].x == Approx(read_crv.control_points[i].x));
         REQUIRE(crv.control_points[i].y == Approx(read_crv.control_points[i].y));
     }
