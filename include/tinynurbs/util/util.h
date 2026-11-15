@@ -44,7 +44,7 @@ inline void homogenousToCartesian(const std::vector<glm::vec<nd, T>> &ptsws,
     ws.clear();
     pts.reserve(ptsws.size());
     ws.reserve(ptsws.size());
-    for (int i = 0; i < ptsws.size(); ++i)
+    for (size_t i = 0; i < ptsws.size(); ++i)
     {
         const glm::vec<nd, T> &ptw_i = ptsws[i];
         pts.push_back(glm::vec<nd - 1, T>(ptw_i / ptw_i[ptw_i.length() - 1]));
@@ -65,9 +65,9 @@ inline void homogenousToCartesian(const array2<glm::vec<nd, T>> &ptsws,
 {
     pts.resize(ptsws.rows(), ptsws.cols());
     ws.resize(ptsws.rows(), ptsws.cols());
-    for (int i = 0; i < ptsws.rows(); ++i)
+    for (size_t i = 0; i < ptsws.rows(); ++i)
     {
-        for (int j = 0; j < ptsws.cols(); ++j)
+        for (size_t j = 0; j < ptsws.cols(); ++j)
         {
             const glm::vec<nd, T> &ptw_ij = ptsws(i, j);
             T w_ij = ptw_ij[nd - 1];
@@ -120,9 +120,9 @@ inline array2<glm::vec<nd + 1, T>> cartesianToHomogenous(const array2<glm::vec<n
                                                          const array2<T> &ws)
 {
     array2<glm::vec<nd + 1, T>> Cw(pts.rows(), pts.cols());
-    for (int i = 0; i < pts.rows(); ++i)
+    for (size_t i = 0; i < pts.rows(); ++i)
     {
-        for (int j = 0; j < pts.cols(); ++j)
+        for (size_t j = 0; j < pts.cols(); ++j)
         {
             Cw(i, j) = util::cartesianToHomogenous(pts(i, j), ws(i, j));
         }

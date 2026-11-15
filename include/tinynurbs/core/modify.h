@@ -63,32 +63,32 @@ void curveKnotInsert(unsigned int deg, const std::vector<T> &knots,
     {
         new_knots[k + i] = u;
     }
-    for (int i = k + 1; i < knots.size(); ++i)
+    for (size_t i = k + 1; i < knots.size(); ++i)
     {
         new_knots[i + r] = knots[i];
     }
     // Copy unaffected control points
     new_cp.resize(cp.size() + r);
-    for (int i = 0; i < k - deg + 1; ++i)
+    for (unsigned int i = 0; i < k - deg + 1; ++i)
     {
         new_cp[i] = cp[i];
     }
-    for (int i = k - s; i < cp.size(); ++i)
+    for (size_t i = k - s; i < cp.size(); ++i)
     {
         new_cp[i + r] = cp[i];
     }
     // Copy affected control points
     std::vector<glm::vec<dim, T>> tmp;
     tmp.resize(deg - s + 1);
-    for (int i = 0; i < deg - s + 1; ++i)
+    for (unsigned int i = 0; i < deg - s + 1; ++i)
     {
         tmp[i] = cp[k - deg + i];
     }
     // Modify affected control points
-    for (int j = 1; j <= r; ++j)
+    for (unsigned int j = 1; j <= r; ++j)
     {
         int L = k - deg + j;
-        for (int i = 0; i < deg - j - s + 1; ++i)
+        for (unsigned int i = 0; i < deg - j - s + 1; ++i)
         {
             T a = (u - knots[L + i]) / (knots[i + k + 1] - knots[L + i]);
             tmp[i] = (1 - a) * tmp[i] + a * tmp[i + 1];
@@ -97,7 +97,7 @@ void curveKnotInsert(unsigned int deg, const std::vector<T> &knots,
         new_cp[k + r - j - s] = tmp[deg - j - s];
     }
     int L = k - deg + r;
-    for (int i = L + 1; i < k - s; ++i)
+    for (unsigned int i = L + 1; i < k - s; ++i)
     {
         new_cp[i] = tmp[i - L];
     }
@@ -139,20 +139,20 @@ void surfaceKnotInsert(unsigned int degree, const std::vector<T> &knots,
     {
         new_knots[i] = knots[i];
     }
-    for (int i = 1; i <= r; ++i)
+    for (unsigned int i = 1; i <= r; ++i)
     {
         new_knots[span + i] = knot;
     }
-    for (int i = span + 1; i < knots.size(); ++i)
+    for (size_t i = span + 1; i < knots.size(); ++i)
     {
         new_knots[i + r] = knots[i];
     }
     // Compute alpha
     array2<T> alpha(degree - s, r + 1, T(0));
-    for (int j = 1; j <= r; ++j)
+    for (unsigned int j = 1; j <= r; ++j)
     {
         int L = span - degree + j;
-        for (int i = 0; i <= degree - j - s; ++i)
+        for (unsigned int i = 0; i <= degree - j - s; ++i)
         {
             alpha(i, j) = (knot - knots[L + i]) / (knots[i + span + 1] - knots[L + i]);
         }
@@ -168,10 +168,10 @@ void surfaceKnotInsert(unsigned int degree, const std::vector<T> &knots,
 
         // Update control points
         // Each row is a u-isocurve, each col is a v-isocurve
-        for (int col = 0; col < cp.cols(); ++col)
+        for (size_t col = 0; col < cp.cols(); ++col)
         {
             // Copy unaffected control points
-            for (int i = 0; i <= span - degree; ++i)
+            for (unsigned int i = 0; i <= span - degree; ++i)
             {
                 new_cp(i, col) = cp(i, col);
             }
@@ -180,15 +180,15 @@ void surfaceKnotInsert(unsigned int degree, const std::vector<T> &knots,
                 new_cp(i + r, col) = cp(i, col);
             }
             // Copy affected control points to temp array
-            for (int i = 0; i < degree - s + 1; ++i)
+            for (unsigned int i = 0; i < degree - s + 1; ++i)
             {
                 tmp[i] = cp(span - degree + i, col);
             }
             // Insert knot
-            for (int j = 1; j <= r; ++j)
+            for (unsigned int j = 1; j <= r; ++j)
             {
                 int L = span - degree + j;
-                for (int i = 0; i <= degree - j - s; ++i)
+                for (unsigned int i = 0; i <= degree - j - s; ++i)
                 {
                     T a = alpha(i, j);
                     tmp[i] = (1 - a) * tmp[i] + a * tmp[i + 1];
@@ -196,8 +196,8 @@ void surfaceKnotInsert(unsigned int degree, const std::vector<T> &knots,
                 new_cp(L, col) = tmp[0];
                 new_cp(span + r - j - s, col) = tmp[degree - j - s];
             }
-            int L = span - degree + r;
-            for (int i = L + 1; i < span - s; ++i)
+            size_t L = span - degree + r;
+            for (size_t i = L + 1; i < span - s; ++i)
             {
                 new_cp(i, col) = tmp[i - L];
             }
@@ -210,10 +210,10 @@ void surfaceKnotInsert(unsigned int degree, const std::vector<T> &knots,
 
         // Update control points
         // Each row is a u-isocurve, each col is a v-isocurve
-        for (int row = 0; row < cp.rows(); ++row)
+        for (size_t row = 0; row < cp.rows(); ++row)
         {
             // Copy unaffected control points
-            for (int i = 0; i <= span - degree; ++i)
+            for (unsigned int i = 0; i <= span - degree; ++i)
             {
                 new_cp(row, i) = cp(row, i);
             }
@@ -222,15 +222,15 @@ void surfaceKnotInsert(unsigned int degree, const std::vector<T> &knots,
                 new_cp(row, i + r) = cp(row, i);
             }
             // Copy affected control points to temp array
-            for (int i = 0; i < degree - s + 1; ++i)
+            for (unsigned int i = 0; i < degree - s + 1; ++i)
             {
                 tmp[i] = cp(row, span - degree + i);
             }
             // Insert knot
-            for (int j = 1; j <= r; ++j)
+            for (unsigned int j = 1; j <= r; ++j)
             {
                 int L = span - degree + j;
-                for (int i = 0; i <= degree - j - s; ++i)
+                for (unsigned int i = 0; i <= degree - j - s; ++i)
                 {
                     T a = alpha(i, j);
                     tmp[i] = (1 - a) * tmp[i] + a * tmp[i + 1];
@@ -238,8 +238,8 @@ void surfaceKnotInsert(unsigned int degree, const std::vector<T> &knots,
                 new_cp(row, L) = tmp[0];
                 new_cp(row, span + r - j - s) = tmp[degree - j - s];
             }
-            int L = span - degree + r;
-            for (int i = L + 1; i < span - s; ++i)
+            size_t L = span - degree + r;
+            for (size_t i = L + 1; i < span - s; ++i)
             {
                 new_cp(row, i) = tmp[i - L];
             }
@@ -284,11 +284,11 @@ void curveSplit(unsigned int degree, const std::vector<T> &knots,
     }
     left_knots.push_back(u);
 
-    for (int i = 0; i < degree + 1; ++i)
+    for (unsigned int i = 0; i < degree + 1; ++i)
     {
         right_knots.push_back(u);
     }
-    for (int i = span_l; i < tmp_knots.size(); ++i)
+    for (size_t i = span_l; i < tmp_knots.size(); ++i)
     {
         right_knots.push_back(tmp_knots[i]);
     }
@@ -298,7 +298,7 @@ void curveSplit(unsigned int degree, const std::vector<T> &knots,
     {
         left_control_points.push_back(tmp_cp[i]);
     }
-    for (int i = ks + r - 1; i < tmp_cp.size(); ++i)
+    for (size_t i = static_cast<size_t>(ks + r - 1); i < tmp_cp.size(); ++i)
     {
         right_control_points.push_back(tmp_cp[i]);
     }
@@ -340,11 +340,11 @@ void surfaceSplit(unsigned int degree, const std::vector<T> &knots,
     }
     left_knots.push_back(param);
 
-    for (int i = 0; i < degree + 1; ++i)
+    for (unsigned int i = 0; i < degree + 1; ++i)
     {
         right_knots.push_back(param);
     }
-    for (int i = span_l; i < tmp_knots.size(); ++i)
+    for (size_t i = static_cast<size_t>(span_l); i < tmp_knots.size(); ++i)
     {
         right_knots.push_back(tmp_knots[i]);
     }
@@ -354,18 +354,18 @@ void surfaceSplit(unsigned int degree, const std::vector<T> &knots,
     {
         size_t ii = 0;
         left_control_points.resize(ks + r, tmp_cp.cols());
-        for (int i = 0; i < ks + r; ++i)
+        for (unsigned int i = 0; i < ks + r; ++i)
         {
-            for (int j = 0; j < tmp_cp.cols(); ++j)
+            for (size_t j = 0; j < tmp_cp.cols(); ++j)
             {
                 left_control_points[ii++] = tmp_cp(i, j);
             }
         }
         ii = 0;
         right_control_points.resize(tmp_cp.rows() - ks - r + 1, tmp_cp.cols());
-        for (int i = ks + r - 1; i < tmp_cp.rows(); ++i)
+        for (size_t i = static_cast<size_t>(ks + r - 1); i < tmp_cp.rows(); ++i)
         {
-            for (int j = 0; j < tmp_cp.cols(); ++j)
+            for (size_t j = 0; j < tmp_cp.cols(); ++j)
             {
                 right_control_points[ii++] = tmp_cp(i, j);
             }
@@ -375,18 +375,18 @@ void surfaceSplit(unsigned int degree, const std::vector<T> &knots,
     {
         size_t ii = 0;
         left_control_points.resize(tmp_cp.rows(), ks + r);
-        for (int i = 0; i < tmp_cp.rows(); ++i)
+        for (size_t i = 0; i < tmp_cp.rows(); ++i)
         {
-            for (int j = 0; j < ks + r; ++j)
+            for (unsigned int j = 0; j < ks + r; ++j)
             {
                 left_control_points[ii++] = tmp_cp(i, j);
             }
         }
         ii = 0;
         right_control_points.resize(tmp_cp.rows(), tmp_cp.cols() - ks - r + 1);
-        for (int i = 0; i < tmp_cp.rows(); ++i)
+        for (size_t i = 0; i < tmp_cp.rows(); ++i)
         {
-            for (int j = ks + r - 1; j < tmp_cp.cols(); ++j)
+            for (size_t j = static_cast<size_t>(ks + r - 1); j < tmp_cp.cols(); ++j)
             {
                 right_control_points[ii++] = tmp_cp(i, j);
             }
@@ -430,7 +430,7 @@ RationalCurve<T> curveKnotInsert(const RationalCurve<T> &crv, T u, unsigned int 
     // Convert to homogenous coordinates
     std::vector<glm::vec<4, T>> Cw;
     Cw.reserve(crv.control_points.size());
-    for (int i = 0; i < crv.control_points.size(); ++i)
+    for (size_t i = 0; i < crv.control_points.size(); ++i)
     {
         Cw.push_back(util::cartesianToHomogenous(crv.control_points[i], crv.weights[i]));
     }
@@ -443,7 +443,7 @@ RationalCurve<T> curveKnotInsert(const RationalCurve<T> &crv, T u, unsigned int 
     // Convert back to cartesian coordinates
     new_crv.control_points.reserve(new_Cw.size());
     new_crv.weights.reserve(new_Cw.size());
-    for (int i = 0; i < new_Cw.size(); ++i)
+    for (size_t i = 0; i < new_Cw.size(); ++i)
     {
         new_crv.control_points.push_back(util::homogenousToCartesian(new_Cw[i]));
         new_crv.weights.push_back(new_Cw[i].w);
@@ -487,9 +487,9 @@ RationalSurface<T> surfaceKnotInsertU(const RationalSurface<T> &srf, T u, unsign
 
     // Original control points in homogenous coordinates
     array2<glm::vec<4, T>> Cw(srf.control_points.rows(), srf.control_points.cols());
-    for (int i = 0; i < srf.control_points.rows(); ++i)
+    for (size_t i = 0; i < srf.control_points.rows(); ++i)
     {
-        for (int j = 0; j < srf.control_points.cols(); ++j)
+        for (size_t j = 0; j < srf.control_points.cols(); ++j)
         {
             Cw(i, j) = util::cartesianToHomogenous(srf.control_points(i, j), srf.weights(i, j));
         }
@@ -504,9 +504,9 @@ RationalSurface<T> surfaceKnotInsertU(const RationalSurface<T> &srf, T u, unsign
     // Convert back to cartesian coordinates
     new_srf.control_points.resize(new_Cw.rows(), new_Cw.cols());
     new_srf.weights.resize(new_Cw.rows(), new_Cw.cols());
-    for (int i = 0; i < new_Cw.rows(); ++i)
+    for (size_t i = 0; i < new_Cw.rows(); ++i)
     {
-        for (int j = 0; j < new_Cw.cols(); ++j)
+        for (size_t j = 0; j < new_Cw.cols(); ++j)
         {
             new_srf.control_points(i, j) = util::homogenousToCartesian(new_Cw(i, j));
             new_srf.weights(i, j) = new_Cw(i, j).w;
@@ -551,9 +551,9 @@ RationalSurface<T> surfaceKnotInsertV(const RationalSurface<T> &srf, T v, unsign
     new_srf.knots_u = srf.knots_u;
     // Original control points in homogenous coordinates
     array2<glm::vec<4, T>> Cw(srf.control_points.rows(), srf.control_points.cols());
-    for (int i = 0; i < srf.control_points.rows(); ++i)
+    for (size_t i = 0; i < srf.control_points.rows(); ++i)
     {
-        for (int j = 0; j < srf.control_points.cols(); ++j)
+        for (size_t j = 0; j < srf.control_points.cols(); ++j)
         {
             Cw(i, j) = util::cartesianToHomogenous(srf.control_points(i, j), srf.weights(i, j));
         }
@@ -568,9 +568,9 @@ RationalSurface<T> surfaceKnotInsertV(const RationalSurface<T> &srf, T v, unsign
     // Convert back to cartesian coordinates
     new_srf.control_points.resize(new_Cw.rows(), new_Cw.cols());
     new_srf.weights.resize(new_Cw.rows(), new_Cw.cols());
-    for (int i = 0; i < new_Cw.rows(); ++i)
+    for (size_t i = 0; i < new_Cw.rows(); ++i)
     {
-        for (int j = 0; j < new_Cw.cols(); ++j)
+        for (size_t j = 0; j < new_Cw.cols(); ++j)
         {
             new_srf.control_points(i, j) = util::homogenousToCartesian(new_Cw(i, j));
             new_srf.weights(i, j) = new_Cw(i, j).w;
@@ -610,7 +610,7 @@ std::tuple<RationalCurve<T>, RationalCurve<T>> curveSplit(const RationalCurve<T>
 
     std::vector<glm::vec<4, T>> Cw, left_Cw, right_Cw;
     Cw.reserve(crv.control_points.size());
-    for (int i = 0; i < crv.control_points.size(); ++i)
+    for (size_t i = 0; i < crv.control_points.size(); ++i)
     {
         Cw.push_back(util::cartesianToHomogenous(crv.control_points[i], crv.weights[i]));
     }
@@ -621,12 +621,12 @@ std::tuple<RationalCurve<T>, RationalCurve<T>> curveSplit(const RationalCurve<T>
     left.weights.reserve(left_Cw.size());
     right.control_points.reserve(right_Cw.size());
     right.weights.reserve(right_Cw.size());
-    for (int i = 0; i < left_Cw.size(); ++i)
+    for (size_t i = 0; i < left_Cw.size(); ++i)
     {
         left.control_points.push_back(util::homogenousToCartesian(left_Cw[i]));
         left.weights.push_back(left_Cw[i].w);
     }
-    for (int i = 0; i < right_Cw.size(); ++i)
+    for (size_t i = 0; i < right_Cw.size(); ++i)
     {
         right.control_points.push_back(util::homogenousToCartesian(right_Cw[i]));
         right.weights.push_back(right_Cw[i].w);
